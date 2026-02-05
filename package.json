@@ -1,0 +1,12 @@
+{
+  "name": "whoop.nvim",
+  "version": "1.0.0",
+  "description": "Whoop fitness tracker integration for Neovim",
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "nvim-lua/plenary.nvim",
+    "MunifTanjim/nui.nvim"
+  },
+  "devDependencies": {}
+}
