@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whoop.nvim - Privacy Policy</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .highlight {
+            background: #ecf0f1;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 20px 0;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Privacy Policy</h1>
+    
+    <p><strong>Last Updated:</strong> February 5, 2026</p>
+
+    <div class="highlight">
+        <strong>Summary:</strong> This application only accesses your own Whoop fitness data. 
+        No data is collected, stored on external servers, or shared with third parties. 
+        All data remains on your local device.
+    </div>
+
+    <h2>Overview</h2>
+    <p>
+        <a href="https://github.com/idossha/whoop.nvim">Whoop.nvim</a> is a Neovim plugin 
+        designed for personal use to display your own Whoop fitness data. This privacy policy 
+        explains how we handle your data.
+    </p>
+
+    <h2>Data Collection</h2>
+    <p><strong>We do not collect, store, or share any personal data.</strong></p>
+    
+    <p>This plugin:</p>
+    <ul>
+        <li>Only accesses your own Whoop fitness data through the official Whoop API</li>
+        <li>Stores authentication tokens <strong>locally</strong> on your device only</li>
+        <li>Caches fitness data <strong>locally</strong> on your device only</li>
+        <li>Does not transmit any data to external servers</li>
+        <li>Does not share data with third parties</li>
+    </ul>
+
+    <h2>Local Storage</h2>
+    <p>All data is stored locally in:</p>
+    <ul>
+        <li><code>~/.local/share/nvim/whoop/</code> (Linux/Mac)</li>
+        <li><code>%LOCALAPPDATA%\nvim-data\whoop\</code> (Windows)</li>
+    </ul>
+    
+    <p>This includes:</p>
+    <ul>
+        <li>OAuth tokens (provided by Whoop)</li>
+        <li>Cached fitness data (recovery, sleep, workouts)</li>
+    </ul>
+
+    <h2>Third-Party Services</h2>
+    <p>The only external service contacted is:</p>
+    <ul>
+        <li><strong>Whoop API</strong> (api.prod.whoop.com) - for retrieving your fitness data</li>
+    </ul>
+
+    <h2>Your Rights</h2>
+    <p>You can:</p>
+    <ul>
+        <li>Revoke access anytime via <a href="https://developer-dashboard.whoop.com">Whoop Developer Dashboard</a></li>
+        <li>Delete local data by removing the plugin cache directory</li>
+        <li>Uninstall the plugin to remove all local data</li>
+    </ul>
+
+    <h2>Contact</h2>
+    <p>
+        For questions about this privacy policy:<br>
+        GitHub Issues: <a href="https://github.com/idossha/whoop.nvim/issues">https://github.com/idossha/whoop.nvim/issues</a>
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+        We may update this privacy policy from time to time. Changes will be posted on this page.
+    </p>
+</body>
+</html>
