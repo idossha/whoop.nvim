@@ -97,7 +97,10 @@ function M.authenticate()
           client:write("HTTP/1.1 200 OK\r\nContent-Length: 32\r\n\r\nAuthentication successful! Close this tab.")
           client:close()
           server:close()
-          M.exchange_code_for_token(code)
+          -- Defer HTTP call to main loop to avoid fast event context error
+          vim.schedule(function()
+            M.exchange_code_for_token(code)
+          end)
         end
       end
     end)
