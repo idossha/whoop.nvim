@@ -1,6 +1,6 @@
 local M = {}
 
-local config = require("whoop.config").config
+local config_module = require("whoop.config")
 local storage = require("whoop.storage")
 local http = require("whoop.http")
 
@@ -8,7 +8,19 @@ local WHOOP_AUTH_URL = "https://api.prod.whoop.com/oauth/oauth2/auth"
 local WHOOP_TOKEN_URL = "https://api.prod.whoop.com/oauth/oauth2/token"
 local REDIRECT_URI = "http://localhost:8080/callback"
 
+-- Helper to get config dynamically
+local function get_config()
+  return config_module.config
+end
+
 function M.authenticate()
+  local config = get_config()
+
+  if not config.client_id or not config.client_secret then
+    vim.notify("whoop.nvim: client_id and client_secret not configured. Run :checkhealth whoop", vim.log.levels.ERROR)
+    return
+  end
+
   local server = vim.uv.new_tcp()
   if not server then
     vim.notify("Failed to create auth server", vim.log.levels.ERROR)
@@ -50,19 +62,18 @@ function M.authenticate()
   local auth_url = string.format(
     "%s?client_id=%s&redirect_uri=%s&response_type=code&scope=%s",
     WHOOP_AUTH_URL,
-    vim.uri_encode(config.client_id),
-    vim.uri_encode(REDIRECT_URI),
-    vim.uri_encode("read:recovery read:sleep read:workout read:cycles read:profile offline")
+    config.client_id,
+    REDIRECT_URI,
+    "read:recovery read:sleep read:workout read:cycles read:profile offline"
   )
-
-  -- Debug: print the auth URL (remove this after testing)
-  vim.notify("Opening: " .. auth_url:gsub(config.client_id, "***"), vim.log.levels.INFO)
 
   vim.fn.system({ "open", auth_url })
   vim.notify("Opening browser for Whoop authentication...", vim.log.levels.INFO)
 end
 
 function M.exchange_code_for_token(code)
+  local config = get_config()
+
   local body = string.format(
     "grant_type=authorization_code&code=%s&redirect_uri=%s&client_id=%s&client_secret=%s",
     code,
@@ -83,12 +94,14 @@ function M.exchange_code_for_token(code)
     })
     vim.notify("Whoop authentication successful!", vim.log.levels.INFO)
   else
-    vim.notify("Failed to exchange code for token", vim.log.levels.ERROR)
+    vim.notify("Failed to exchange code for token: " .. vim.inspect(response), vim.log.levels.ERROR)
   end
 end
 
 function M.refresh_access_token()
+  local config = get_config()
   local tokens = storage.load_tokens()
+
   if not tokens or not tokens.refresh_token then
     vim.notify("No refresh token available. Please re-authenticate.", vim.log.levels.ERROR)
     M.authenticate()
