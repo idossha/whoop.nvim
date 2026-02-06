@@ -1,51 +1,48 @@
 # Privacy Policy
 
-## Whoop.nvim Privacy Policy
+**Effective Date:** February 6, 2026
 
-**Last Updated:** February 5, 2026
+## Summary
 
-### Overview
+whoop.nvim is a local Neovim plugin that accesses your personal WHOOP fitness data. **All data remains on your device.** No information is collected, transmitted to third parties, or stored on external servers.
 
-Whoop.nvim is a Neovim plugin designed for personal use to display your own Whoop fitness data. This privacy policy explains how we handle your data.
+## Data Handling
 
-### Data Collection
+### What We Access
+- WHOOP fitness metrics (recovery, sleep, workouts) via official WHOOP API
+- OAuth authentication tokens provided by WHOOP
 
-**We do not collect, store, or share any personal data.**
+### Where Data Is Stored
+All data is stored **locally** on your device:
 
-This plugin:
-- Only accesses your own Whoop fitness data through the official Whoop API
-- Stores authentication tokens **locally** on your device only
-- Caches fitness data **locally** on your device only
-- Does not transmit any data to external servers
-- Does not share data with third parties
+```
+~/.local/share/nvim/whoop/          (Linux/macOS)
+%LOCALAPPDATA%\nvim-data\whoop\     (Windows)
+```
 
-### Local Storage
+### What We Do NOT Do
+- Collect or store data on external servers
+- Share data with third parties
+- Track usage or analytics
+- Display advertisements
 
-All data is stored locally in:
-- `~/.local/share/nvim/whoop/` (Linux/Mac)
-- `%LOCALAPPDATA%\nvim-data\whoop\` (Windows)
+## Third-Party Services
 
-This includes:
-- OAuth tokens (encrypted/authenticated by Whoop)
-- Cached fitness data (recovery, sleep, workouts)
+| Service | Purpose | Data Shared |
+|---------|---------|-------------|
+| WHOOP API | Retrieve fitness data | Authenticated API requests only |
 
-### Third-Party Services
+## Your Control
 
-The only external service contacted is:
-- **Whoop API** (api.prod.whoop.com) - for retrieving your fitness data
+You may:
+- Revoke API access via [WHOOP Developer Dashboard](https://developer-dashboard.whoop.com)
+- Delete local data by removing the plugin directory
+- Uninstall the plugin to remove all associated data
 
-### Your Rights
+## Changes
 
-You can:
-- Revoke access anytime via Whoop Developer Dashboard
-- Delete local data by removing `~/.local/share/nvim/whoop/`
-- Uninstall the plugin to remove all data
+This policy may be updated periodically. Changes will be reflected in this document.
 
-### Contact
+## Contact
 
-For questions about this privacy policy:
-- GitHub Issues: https://github.com/idossha/whoop.nvim/issues
-
-### Changes
-
-We may update this privacy policy from time to time. Changes will be posted on this page.
+Questions or concerns: [GitHub Issues](https://github.com/idossha/whoop.nvim/issues)

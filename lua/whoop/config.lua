@@ -44,6 +44,14 @@ function M.setup(opts)
     require("whoop.ui.config").open()
   end, {})
   
+  vim.api.nvim_create_user_command("WhoopTest", function()
+    require("whoop.api").test_api()
+  end, {})
+  
+  vim.api.nvim_create_user_command("WhoopClearAuth", function()
+    require("whoop.api").clear_auth()
+  end, {})
+  
   if M.config.mappings then
     for cmd, mapping in pairs(M.config.mappings) do
       vim.keymap.set("n", mapping, function()

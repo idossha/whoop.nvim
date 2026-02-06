@@ -1,12 +1,28 @@
 {
   "name": "whoop.nvim",
   "version": "1.0.0",
-  "description": "Whoop fitness tracker integration for Neovim",
-  "author": "Your Name",
+  "description": "WHOOP fitness integration for Neovim",
+  "author": "idossha",
   "license": "MIT",
-  "dependencies": {
-    "nvim-lua/plenary.nvim",
-    "MunifTanjim/nui.nvim"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/idossha/whoop.nvim"
   },
-  "devDependencies": {}
+  "engines": {
+    "nvim": ">=0.8.0"
+  },
+  "dependencies": {
+    "nvim-lua/plenary.nvim": ">=0.1.0",
+    "MunifTanjim/nui.nvim": ">=0.2.0"
+  },
+  "keywords": [
+    "neovim",
+    "nvim",
+    "whoop",
+    "fitness",
+    "health",
+    "recovery",
+    "sleep",
+    "workout"
+  ]
 }

@@ -39,23 +39,24 @@ local function render_dashboard(data)
 
   if data.recovery and data.recovery.records then
     local recovery = data.recovery.records[1]
-    if recovery then
-      local score = recovery.score or 0
+    if recovery and recovery.score then
+      local score = recovery.score.recovery_score or 0
       local color = score >= 67 and "🟢" or (score >= 33 and "🟡" or "🔴")
       table.insert(lines, "  📊 RECOVERY")
       table.insert(lines, string.format("     Score: %s %d%% %s", color, score, create_bar_chart(score, 100, 20)))
-      table.insert(lines, string.format("     RHR: %d bpm", recovery.resting_heart_rate or 0))
-      table.insert(lines, string.format("     HRV: %d ms", recovery.hrv_rmssd_milli or 0))
+      table.insert(lines, string.format("     RHR: %d bpm", recovery.score.resting_heart_rate or 0))
+      table.insert(lines, string.format("     HRV: %d ms", recovery.score.hrv_rmssd_milli or 0))
       table.insert(lines, "")
     end
   end
 
   if data.sleep and data.sleep.records then
     local sleep = data.sleep.records[1]
-    if sleep then
+    if sleep and sleep.score and sleep.score.stage_summary then
       table.insert(lines, "  😴 SLEEP")
-      table.insert(lines, string.format("     Total: %s", format_duration(sleep.total_in_bed_time_milli / 60000 or 0)))
-      table.insert(lines, string.format("     Efficiency: %d%%", sleep.efficiency or 0))
+      local total_milli = sleep.score.stage_summary.total_in_bed_time_milli or 0
+      table.insert(lines, string.format("     Total: %s", format_duration(total_milli / 60000)))
+      table.insert(lines, string.format("     Efficiency: %d%%", sleep.score.sleep_efficiency_percentage or 0))
       table.insert(lines, "")
     end
   end
@@ -64,10 +65,11 @@ local function render_dashboard(data)
     table.insert(lines, "  💪 RECENT WORKOUTS")
     for i, workout in ipairs(data.workouts.records) do
       if i > 3 then break end
-      table.insert(lines, string.format("     %s: %s (%d strain)", 
+      local strain = workout.score and workout.score.strain or 0
+      table.insert(lines, string.format("     %s: %s (%.1f strain)", 
         workout.start or "N/A",
         workout.sport_name or "Unknown",
-        math.floor(workout.score or 0)))
+        strain))
     end
     table.insert(lines, "")
   end
