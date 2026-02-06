@@ -8,9 +8,24 @@ local WHOOP_AUTH_URL = "https://api.prod.whoop.com/oauth/oauth2/auth"
 local WHOOP_TOKEN_URL = "https://api.prod.whoop.com/oauth/oauth2/token"
 local REDIRECT_URI = "http://localhost:8080/callback"
 
+-- Store the state for verification
+local auth_state = nil
+
 -- Helper to get config dynamically
 local function get_config()
   return config_module.config
+end
+
+-- Generate a random state string (at least 8 chars)
+local function generate_state()
+  local chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+  local length = 16
+  local result = {}
+  for i = 1, length do
+    local idx = math.random(1, #chars)
+    table.insert(result, chars:sub(idx, idx))
+  end
+  return table.concat(result)
 end
 
 function M.authenticate()
@@ -20,6 +35,9 @@ function M.authenticate()
     vim.notify("whoop.nvim: client_id and client_secret not configured. Run :checkhealth whoop", vim.log.levels.ERROR)
     return
   end
+
+  -- Generate and store state for verification
+  auth_state = generate_state()
 
   local server = vim.uv.new_tcp()
   if not server then
@@ -48,8 +66,34 @@ function M.authenticate()
       end
 
       if data then
+        -- Check for error in callback
+        local error_code = data:match("error=([^&%s]+)")
+        if error_code then
+          local error_desc = data:match("error_description=([^&%s]+)") or "Unknown error"
+          vim.schedule(function()
+            vim.notify("OAuth error: " .. error_code .. " - " .. error_desc:gsub("+", " "), vim.log.levels.ERROR)
+          end)
+          client:write("HTTP/1.1 400 Bad Request\r\nContent-Length: 20\r\n\r\nAuthentication failed!")
+          client:close()
+          server:close()
+          return
+        end
+
         local code = data:match("code=([^&%s]+)")
+        local returned_state = data:match("state=([^&%s]+)")
+
         if code then
+          -- Verify state to prevent CSRF
+          if returned_state ~= auth_state then
+            vim.schedule(function()
+              vim.notify("OAuth state mismatch! Possible CSRF attack.", vim.log.levels.ERROR)
+            end)
+            client:write("HTTP/1.1 403 Forbidden\r\nContent-Length: 20\r\n\r\nState mismatch!")
+            client:close()
+            server:close()
+            return
+          end
+
           client:write("HTTP/1.1 200 OK\r\nContent-Length: 32\r\n\r\nAuthentication successful! Close this tab.")
           client:close()
           server:close()
@@ -60,11 +104,12 @@ function M.authenticate()
   end)
 
   local auth_url = string.format(
-    "%s?client_id=%s&redirect_uri=%s&response_type=code&scope=%s",
+    "%s?client_id=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s",
     WHOOP_AUTH_URL,
     config.client_id,
     REDIRECT_URI,
-    "read:recovery read:sleep read:workout read:cycles read:profile offline"
+    "read:recovery read:sleep read:workout read:cycles read:profile offline",
+    auth_state
   )
 
   vim.fn.system({ "open", auth_url })
