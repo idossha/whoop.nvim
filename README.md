@@ -6,6 +6,8 @@ A Neovim plugin for integrating WHOOP fitness data directly into your developmen
 
 whoop.nvim provides seamless access to your WHOOP recovery, sleep, and workout data without leaving Neovim. View your physiological metrics through an elegant terminal interface designed for developers.
 
+![whoop.nvim Dashboard](docs/whoop_dashboard.png)
+
 ## Features
 
 - **Interactive Dashboard**: Visualize recovery scores, sleep metrics, and recent workouts
