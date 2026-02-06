@@ -55,6 +55,9 @@ function M.authenticate()
     vim.uri_encode("read:recovery read:sleep read:workout read:cycles read:profile offline")
   )
 
+  -- Debug: print the auth URL (remove this after testing)
+  vim.notify("Opening: " .. auth_url:gsub(config.client_id, "***"), vim.log.levels.INFO)
+
   vim.fn.system({ "open", auth_url })
   vim.notify("Opening browser for Whoop authentication...", vim.log.levels.INFO)
 end
