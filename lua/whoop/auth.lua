@@ -48,10 +48,11 @@ function M.authenticate()
   end)
 
   local auth_url = string.format(
-    "%s?client_id=%s&redirect_uri=%s&response_type=code&scope=read:recovery read:sleep read:workout read:cycles read:profile offline",
+    "%s?client_id=%s&redirect_uri=%s&response_type=code&scope=%s",
     WHOOP_AUTH_URL,
-    config.client_id,
-    REDIRECT_URI
+    vim.uri_encode(config.client_id),
+    vim.uri_encode(REDIRECT_URI),
+    vim.uri_encode("read:recovery read:sleep read:workout read:cycles read:profile offline")
   )
 
   vim.fn.system({ "open", auth_url })
